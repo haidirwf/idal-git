@@ -1,0 +1,83 @@
+#!/bin/bash
+
+# Function to display the banner
+show_banner() {
+    # Using a nice Laravel-like red/orange color scheme for the banner
+    echo -e "\e[38;5;203m"
+    cat << "EOF"
+  _     _       _       _ _   
+ (_)   | |     | |     (_) |  
+  _  __| | __ _| | __ _ _| |_ 
+ | |/ _` |/ _` | |/ _` | | __|
+ | | (_| | (_| | | (_| | | |_ 
+ |_|\__,_|\__,_|_|\__, |_|\__|
+                   __/ |      
+                  |___/       
+EOF
+    echo -e "\e[0m"
+    echo -e "  \e[1mAutomated Git Workflow CLI\e[0m\n"
+}
+
+idal_init() {
+    show_banner
+    echo -e "[\e[34mINFO\e[0m] Initializing new idalgit project..."
+    
+    git init
+    git add .
+    git commit -m "Commit"
+    
+    echo ""
+    read -p "Enter git repository URL (origin): " repo_url
+    
+    if [ -z "$repo_url" ]; then
+        echo -e "[\e[31mERROR\e[0m] Repository URL cannot be empty. Aborting."
+        exit 1
+    fi
+    
+    git remote add origin "$repo_url"
+    git branch -M main
+    git push -u origin main
+    
+    echo -e "\n[\e[32mSUCCESS\e[0m] Project initialized and pushed to $repo_url"
+}
+
+idal_git() {
+    show_banner
+    
+    echo -e "[\e[34mINFO\e[0m] Staging all files (git add .)"
+    git add .
+    
+    echo ""
+    read -p "Enter commit message: " commit_message
+    
+    if [ -z "$commit_message" ]; then
+        echo -e "[\e[31mERROR\e[0m] Commit message cannot be empty. Aborting."
+        exit 1
+    fi
+    
+    git commit -m "$commit_message"
+    
+    echo -e "\n[\e[34mINFO\e[0m] Pushing changes to remote..."
+    git push
+    
+    echo -e "\n[\e[32mSUCCESS\e[0m] Changes successfully committed and pushed!"
+}
+
+case "$1" in
+    init)
+        idal_init
+        ;;
+    git)
+        idal_git
+        ;;
+    *)
+        show_banner
+        echo "Usage: idal <command>"
+        echo ""
+        echo "Commands:"
+        echo "  init    Run git init, add, commit, prompt for repo URL, and push to main"
+        echo "  git     Run git add, prompt for message, commit, and push"
+        echo ""
+        exit 1
+        ;;
+esac
