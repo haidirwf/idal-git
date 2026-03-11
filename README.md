@@ -29,11 +29,9 @@ Follow these steps to install `idalgit` globally on your system:
 Choose where you want to store the script, then clone this repository:
 
 ```bash
-git clone https://github.com/YOUR_GITHUB_USERNAME/idalgit.git
+git clone https://github.com/haidirwf/idalgit.git
 cd idalgit
 ```
-
-*(Remember to replace `YOUR_GITHUB_USERNAME` with your actual username once you upload this!)*
 
 ### 2. Make the Script Executable
 
