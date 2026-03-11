@@ -13,85 +13,76 @@
 
 **Automated Git Workflow CLI**
 
-A simple, colorful, and powerful CLI tool to make your daily Git workflow faster and easier.
+A powerful, visually appealing CLI tool designed to streamline daily Git operations into rapid, single-line commands with built-in safety checks.
 
-## ✨ Why use idalgit?
-Instead of typing `git add .`, then `git commit -m "..."`, and finally `git push` every single time, you can just type **`idal git`**, enter your message, and you're done! 
-
-It also comes with beautiful colorful outputs and safety checks to prevent common Git mistakes.
+## ✨ Key Benefits
+* **Speed:** Replaces repetitive sequences (add, commit, push) with single commands.
+* **Safety:** Built-in safeguards prevent empty commits and initialize errors. 
+* **Visibility:** Replaces verbose Git outputs with clean, colorful, and highly readable terminal layouts.
 
 ---
 
 ## 🛠️ Installation 
 
-You can install `idalgit` globally on your computer in seconds. 
-
-Open your terminal and run this single command:
+Install `idalgit` globally in seconds via terminal:
 
 ```bash
 curl -sL https://raw.githubusercontent.com/haidirwf/idal-git/main/install.sh | bash
 ```
 
-> **Note:** You might be asked for your computer password because it installs the tool globally so you can use it in any folder.
+> *Requires `sudo` privileges to write to `/usr/local/bin`.*
 
 ---
 
-## 📖 How to Use
+## 📖 Command Reference
 
-Once installed, you can use the `idal` command in any project folder.
+Run `idal help` anywhere to view the command menu.
 
-### 1. Starting a New Project (`idal init`)
-Use this when you have a brand new folder on your computer and want to upload it to a new GitHub repository.
+### 1. New Project Setup (`idal init`)
+Initializes a new repository and pushes your first commit to a remote origin instantly.
 
 ```bash
 idal init
 ```
-**What it does for you:**
-1. Turns the folder into a Git project (`git init`).
-2. Saves all your current files (`git add` & `git commit`).
-3. Asks you to paste your new GitHub URL.
-4. Uploads everything to the `main` branch immediately.
+* **Process:** `git init` → `git add .` → `git commit` → Prompts for URL → `git push origin main`
+* **Safeguards:** Automatically aborts if the directory is already a Git repository.
 
-### 2. Saving Your Work (`idal git`)
-Use this every time you make changes to your code and want to save and upload them.
+### 2. Daily Save & Upload (`idal git`)
+The core command for rapid development cycles.
 
 ```bash
 idal git
 ```
-**What it does for you:**
-1. Checks if you actually changed any files (prevents empty saves).
-2. Stages all changes (`git add .`).
-3. Asks you to type a message explaining what you changed.
-4. Saves (`git commit`) and uploads (`git push`) automatically.
+* **Process:** Stages all files → Prompts for commit message → Commits → Pushes to origin.
+* **Safeguards:** Aborts if there are no modified files in the working tree.
 
-### 3. Seeing What Changed (`idal status`)
-A much cleaner, colorful version of `git status`. It simply tells you exactly which files were added, modified, or deleted without the confusing extra text.
+### 3. Check Status (`idal status`)
+A vibrant, clutter-free alternative to `git status` that cleanly highlights modified (`~`), added (`+`), and deleted (`-`) files.
 
 ```bash
 idal status
 ```
 
-### 4. Viewing History (`idal log`)
-Want to see your past commits? This draws a beautiful, color-coded tree diagram of your recent saves.
+### 4. View History (`idal log`)
+Displays the 10 most recent commits in a beautiful, formatted table.
 
 ```bash
 idal log
 ```
 
-### 5. Getting Updates from Team (`idal sync`)
-If you are working with others and need to download their latest changes from GitHub without messing up your own files, use this safe pull command.
+### 5. Safe Pull (`idal sync`)
+Pulls the latest changes from your remote branch using a rebasing strategy instead of merge commits to maintain a linear history.
 
 ```bash
 idal sync
 ```
 
-### 6. Oops, I made a mistake! (`idal undo`)
-Did you just run `idal git` but realized you misspelled your commit message or forgot a file? Don't panic!
+### 6. Safe Undo (`idal undo`)
+Deletes your last commit from the log **while keeping your local file changes intact** in the staging area. Essential for fixing typos in commit messages.
 
 ```bash
 idal undo
 ```
-This will delete the last commit you made, BUT it **keeps all your file changes safe** so you can fix your mistake and try `idal git` again.
 
 ---
 **Enjoy your new automated workflow! 🎉**
