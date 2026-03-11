@@ -13,155 +13,85 @@
 
 **Automated Git Workflow CLI**
 
-🌍 Choose your language / Pilih bahasa Anda:
-* [🇬🇧 English](#-english)
-* [🇮🇩 Bahasa Indonesia](#-bahasa-indonesia)
+A simple, colorful, and powerful CLI tool to make your daily Git workflow faster and easier.
+
+## ✨ Why use idalgit?
+Instead of typing `git add .`, then `git commit -m "..."`, and finally `git push` every single time, you can just type **`idal git`**, enter your message, and you're done! 
+
+It also comes with beautiful colorful outputs and safety checks to prevent common Git mistakes.
 
 ---
 
-## 🇬🇧 English
+## 🛠️ Installation 
 
-A custom CLI tool designed to streamline Git workflow with style, color, and robust guardrails.
+You can install `idalgit` globally on your computer in seconds. 
 
-### 🚀 Features
-
-* **`idal init`**: Instantly initialize a new Git repository, stage all files, make an initial commit, prompt for your remote origin URL, and push to the `main` branch. Checks if it's already a repository naturally.
-* **`idal git`**: Automatically stage all changes, prompt for a commit message, and push to your current branch securely. Prevents empty commits if no files were changed.
-* **`idal status`**: A colorful, concise, and easy-to-read alternative to `git status` showing modified, added, and deleted files cleanly.
-* **`idal log`**: Automatically displays recent commits into a beautiful, colorful tree graph layout.
-* **`idal sync`**: Seamlessly pull the newest changes from the remote repository safely using rebase.
-* **`idal undo`**: Mess up your last commit message? Safely undo your last commit while keeping your local files fully intact in the staging area!
-* **Beautiful UI**: Features a custom-styled banner inspired by Laravel's colorful CLI outputs.
-
-### 🛠️ Instant Installation
-
-You can install `idalgit` globally in seconds using this one-line terminal command:
+Open your terminal and run this single command:
 
 ```bash
 curl -sL https://raw.githubusercontent.com/haidirwf/idal-git/main/install.sh | bash
 ```
 
-**Manual Installation (Alternative)**
-If you prefer not to use the curl method, you can clone and link it manually:
-
-1. Clone the repo:
-   ```bash
-   git clone https://github.com/haidirwf/idal-git.git
-   cd idal-git
-   ```
-2. Make it executable:
-   ```bash
-   chmod +x idal install.sh
-   ```
-3. Create a Symlink:
-   ```bash
-   sudo ln -sf $(pwd)/idal /usr/local/bin/idal
-   ```
-
-### 💻 Usage
-
-**Check Available Commands**
-To view all commands in your terminal at any time:
-```bash
-idal help
-```
-
-**Initializing a New Project**
-When you start a new local project and want to push it to a new empty GitHub repository:
-```bash
-cd /path/to/your/new/project
-idal init
-```
-*Steps automated:*
-1. Verifies the folder is not already a git repository.
-2. `git init`
-3. Stages everything & initial commit
-4. Prompts you for the Git remote URL (e.g., `https://github.com/haidirwf/repo.git`)
-5. Renames branch to `main` and pushes.
-
-**Daily Commit & Push**
-When you're working on an existing repository and are ready to save and upload your latest changes:
-```bash
-idal git
-```
-*Steps automated:*
-1. Stops if no files were changed.
-2. `git add .`
-3. Prompts for commit message.
-4. `git commit` & `git push`
+> **Note:** You might be asked for your computer password because it installs the tool globally so you can use it in any folder.
 
 ---
 
-## 🇮🇩 Bahasa Indonesia
+## 📖 How to Use
 
-Alat CLI kustom yang dirancang untuk menyederhanakan alur kerja (workflow) Git dengan gaya visual yang menarik, penuh warna, dan perlindungan error yang kuat.
+Once installed, you can use the `idal` command in any project folder.
 
-### 🚀 Fitur
-
-* **`idal init`**: Menginisialisasi repositori Git baru, menyiapkan semua file (stage), membuat commit awal, meminta URL origin remote Anda, dan langsung melakukan push ke branch `main`. Secara otomatis mendeteksi jika folder sudah merupakan repositori Git.
-* **`idal git`**: Secara otomatis melakukan stage semua perubahan, meminta pesan commit, dan push ke branch Anda saat ini dengan aman. Mencegah commit kosong jika tidak ada perubahan file.
-* **`idal status`**: Alternatif berwarna, ringkas, dan mudah dibaca untuk `git status`, memperlihatkan file yang dimodifikasi, ditambah, dan dihapus dengan sangat rapi.
-* **`idal log`**: Secara otomatis menampilkan commit-commit terbaru dalam tata letak pohon grafis (tree graph) yang indah dan berwarna.
-* **`idal sync`**: Menarik (pull) perubahan terbaru dari repositori remote dengan aman menggunakan metode *rebase*.
-* **`idal undo`**: Salah ketik pesan commit terakhir? Batalkan commit terakhir Anda dengan aman sambil tetap mempertahankan file-file lokal Anda utuh di *staging area*!
-* **UI Cantik**: Memiliki banner kustom berwarna yang terinspirasi oleh tampilan CLI Laravel.
-
-### 🛠️ Instalasi Instan
-
-Anda dapat menginstal `idalgit` secara global dalam hitungan detik menggunakan perintah terminal satu baris ini:
+### 1. Starting a New Project (`idal init`)
+Use this when you have a brand new folder on your computer and want to upload it to a new GitHub repository.
 
 ```bash
-curl -sL https://raw.githubusercontent.com/haidirwf/idal-git/main/install.sh | bash
-```
-
-**Instalasi Manual (Alternatif)**
-Jika Anda memilih untuk tidak menggunakan metode curl, Anda dapat meng-clone dan menautkannya secara manual:
-
-1. Clone repositori:
-   ```bash
-   git clone https://github.com/haidirwf/idal-git.git
-   cd idal-git
-   ```
-2. Buat file dapat dieksekusi:
-   ```bash
-   chmod +x idal install.sh
-   ```
-3. Buat Symlink:
-   ```bash
-   sudo ln -sf $(pwd)/idal /usr/local/bin/idal
-   ```
-
-### 💻 Penggunaan
-
-**Cek Perintah yang Tersedia**
-Untuk melihat semua perintah di terminal Anda kapan saja:
-```bash
-idal help
-```
-
-**Menginisialisasi Proyek Baru**
-Saat Anda memulai proyek lokal baru dan ingin mengunggahnya ke repo GitHub kosong yang baru:
-```bash
-cd /path/to/proyek/baru/anda
 idal init
 ```
-*Langkah yang diotomatisasi:*
-1. Memverifikasi apakah folder sudah merupakan repositori git atau belum.
-2. `git init`
-3. Stage semua file & commit awal
-4. Meminta URL remote Git (misal: `https://github.com/haidirwf/repo.git`)
-5. Mengganti nama branch menjadi `main` dan melakukan push.
+**What it does for you:**
+1. Turns the folder into a Git project (`git init`).
+2. Saves all your current files (`git add` & `git commit`).
+3. Asks you to paste your new GitHub URL.
+4. Uploads everything to the `main` branch immediately.
 
-**Commit & Push Sehari-hari**
-Saat Anda bekerja pada repositori yang sudah ada dan siap untuk menyimpan serta mengunggah perubahan terbaru Anda:
+### 2. Saving Your Work (`idal git`)
+Use this every time you make changes to your code and want to save and upload them.
+
 ```bash
 idal git
 ```
-*Langkah yang diotomatisasi:*
-1. Berhenti jika tidak ada file yang berubah.
-2. `git add .`
-3. Meminta pesan commit.
-4. `git commit` & `git push`
+**What it does for you:**
+1. Checks if you actually changed any files (prevents empty saves).
+2. Stages all changes (`git add .`).
+3. Asks you to type a message explaining what you changed.
+4. Saves (`git commit`) and uploads (`git push`) automatically.
+
+### 3. Seeing What Changed (`idal status`)
+A much cleaner, colorful version of `git status`. It simply tells you exactly which files were added, modified, or deleted without the confusing extra text.
+
+```bash
+idal status
+```
+
+### 4. Viewing History (`idal log`)
+Want to see your past commits? This draws a beautiful, color-coded tree diagram of your recent saves.
+
+```bash
+idal log
+```
+
+### 5. Getting Updates from Team (`idal sync`)
+If you are working with others and need to download their latest changes from GitHub without messing up your own files, use this safe pull command.
+
+```bash
+idal sync
+```
+
+### 6. Oops, I made a mistake! (`idal undo`)
+Did you just run `idal git` but realized you misspelled your commit message or forgot a file? Don't panic!
+
+```bash
+idal undo
+```
+This will delete the last commit you made, BUT it **keeps all your file changes safe** so you can fix your mistake and try `idal git` again.
 
 ---
 **Enjoy your new automated workflow! 🎉**
