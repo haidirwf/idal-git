@@ -133,8 +133,8 @@ idal_log() {
     printf "\e[1;36m%-10s | %-15s | %-20s | %s\e[0m\n" "Commit" "Date" "Author" "Message"
     echo -e "\e[90m--------------------------------------------------------------------------------------\e[0m"
     
-    # Git Log Formatted Output
-    git log -n 10 --date=relative --format="%h|%cd|%an|%s" | while IFS='|' read -r hash date author msg; do
+    # Git Log Formatted Output (Reversed so newest is at the bottom)
+    git log -n 10 --reverse --date=relative --format="%h|%cd|%an|%s" | while IFS='|' read -r hash date author msg; do
         # Truncate strings to fit standard terminals cleanly
         short_date="${date:0:15}"
         short_author="${author:0:20}"
