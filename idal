@@ -22,9 +22,9 @@ idal_init() {
     show_banner
     echo -e "[\e[34mINFO\e[0m] Initializing new idalgit project..."
     
-    git init
+    git init -q
     git add .
-    git commit -m "Commit"
+    git commit -q -m "Commit"
     
     echo ""
     read -p "Enter git repository URL (origin): " repo_url
@@ -36,7 +36,7 @@ idal_init() {
     
     git remote add origin "$repo_url"
     git branch -M main
-    git push -u origin main
+    git push -q -u origin main
     
     echo -e "\n[\e[32mSUCCESS\e[0m] Project initialized and pushed to $repo_url"
 }
@@ -55,10 +55,10 @@ idal_git() {
         exit 1
     fi
     
-    git commit -m "$commit_message"
+    git commit -q -m "$commit_message"
     
     echo -e "\n[\e[34mINFO\e[0m] Pushing changes to remote..."
-    git push
+    git push -q
     
     echo -e "\n[\e[32mSUCCESS\e[0m] Changes successfully committed and pushed!"
 }
