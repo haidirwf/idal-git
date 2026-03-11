@@ -22,23 +22,23 @@ idal_init() {
     show_banner
     
     if [ -d ".git" ]; then
-        echo -e "[\e[33mWARNING\e[0m] Project ini sudah menggunakan Git. Aborting."
+        echo -e "[\e[33mWARNING\e[0m] Already a Git repo. Aborting."
         exit 1
     fi
 
-    echo -e "[\e[34mINFO\e[0m] Initializing new idalgit project..."
+    echo -e "[\e[34mINFO\e[0m] Initializing project..."
     
     git init -q
     git add .
     git commit -q -m "Commit"
     COMMIT_HASH=$(git rev-parse --short HEAD)
-    echo -e "  \e[38;5;214m✦\e[0m Created initial commit: \e[1;33m$COMMIT_HASH\e[0m"
+    echo -e "  \e[38;5;214m✦\e[0m Init commit: \e[1;33m$COMMIT_HASH\e[0m"
     
     echo ""
-    read -p "Enter git repository URL (origin): " repo_url
+    read -p "Enter origin URL: " repo_url
     
     if [ -z "$repo_url" ]; then
-        echo -e "[\e[31mERROR\e[0m] Repository URL cannot be empty. Aborting."
+        echo -e "[\e[31mERROR\e[0m] URL empty. Aborting."
         exit 1
     fi
     
@@ -49,9 +49,9 @@ idal_init() {
     git push -q -u origin main
     
     if [ $? -eq 0 ]; then
-        echo -e "\n[\e[32mSUCCESS\e[0m] Project initialized and pushed to $repo_url"
+        echo -e "[\e[32mSUCCESS\e[0m] Pushed."
     else
-        echo -e "\n[\e[31mERROR\e[0m] Failed to push to remote repository."
+        echo -e "[\e[31mERROR\e[0m] Push failed."
     fi
 }
 
@@ -59,50 +59,50 @@ idal_git() {
     show_banner
     
     if [ ! -d ".git" ]; then
-        echo -e "[\e[31mERROR\e[0m] Not a git repository. Run 'idal init' first."
+        echo -e "[\e[31mERROR\e[0m] Not a Git repo."
         exit 1
     fi
     
     if [ -z "$(git status --porcelain)" ]; then
-        echo -e "[\e[33mWARNING\e[0m] No changes to commit. Working tree is clean."
+        echo -e "[\e[33mWARNING\e[0m] No changes."
         exit 0
     fi
     
-    echo -e "[\e[34mINFO\e[0m] Staging all files (git add .)"
+    echo -e "[\e[34mINFO\e[0m] Staging files..."
     git add .
     
     echo ""
-    read -p "Enter commit message: " commit_message
+    read -p "Commit message: " commit_message
     
     if [ -z "$commit_message" ]; then
-        echo -e "[\e[31mERROR\e[0m] Commit message cannot be empty. Aborting."
+        echo -e "[\e[31mERROR\e[0m] Empty message. Aborting."
         exit 1
     fi
     
     git commit -q -m "$commit_message"
     COMMIT_HASH=$(git rev-parse --short HEAD)
-    echo -e "  \e[38;5;214m✦\e[0m Committed changes: \e[1;33m$COMMIT_HASH\e[0m (\e[3m$commit_message\e[0m)"
+    echo -e "  \e[38;5;214m✦\e[0m Committed: \e[1;33m$COMMIT_HASH\e[0m (\e[3m$commit_message\e[0m)"
     
-    echo -e "\n[\e[34mINFO\e[0m] Pushing changes to remote..."
+    echo -e "[\e[34mINFO\e[0m] Pushing..."
     git push -q
     
     if [ $? -eq 0 ]; then
-        echo -e "\n[\e[32mSUCCESS\e[0m] Changes successfully committed and pushed!"
+        echo -e "[\e[32mSUCCESS\e[0m] Pushed!"
     else
-        echo -e "\n[\e[31mERROR\e[0m] Failed to push changes."
+        echo -e "[\e[31mERROR\e[0m] Push failed."
     fi
 }
 
 idal_status() {
     show_banner
     if [ ! -d ".git" ]; then
-         echo -e "[\e[31mERROR\e[0m] Not a git repository."
+         echo -e "[\e[31mERROR\e[0m] Not a Git repo."
          exit 1
     fi
-    echo -e "[\e[34mINFO\e[0m] Current Status:\n"
+    echo -e "[\e[34mINFO\e[0m] Status:\n"
     
     if [ -z "$(git status --porcelain)" ]; then
-        echo -e "  \e[32m✔ Working tree clean\e[0m"
+        echo -e "  \e[32m✔ Clean\e[0m"
     else
         git status --short | while read line; do
             status=${line:0:2}
@@ -124,50 +124,63 @@ idal_status() {
 idal_log() {
     show_banner
     if [ ! -d ".git" ]; then
-         echo -e "[\e[31mERROR\e[0m] Not a git repository."
+         echo -e "[\e[31mERROR\e[0m] Not a Git repo."
          exit 1
     fi
     echo -e "[\e[34mINFO\e[0m] Recent Commits:\n"
-    git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit -n 10
+    
+    # Table Header
+    printf "\e[1;36m%-10s | %-15s | %-20s | %s\e[0m\n" "Commit" "Date" "Author" "Message"
+    echo -e "\e[90m--------------------------------------------------------------------------------------\e[0m"
+    
+    # Git Log Formatted Output
+    git log -n 10 --date=relative --format="%h|%cd|%an|%s" | while IFS='|' read -r hash date author msg; do
+        # Truncate strings to fit standard terminals cleanly
+        short_date="${date:0:15}"
+        short_author="${author:0:20}"
+        
+        printf "\e[33m%-10s\e[0m | \e[32m%-15s\e[0m | \e[35m%-20s\e[0m | \e[0m%s\n" "$hash" "$short_date" "$short_author" "$msg"
+    done
+    
     echo -e "\n"
 }
 
 idal_sync() {
     show_banner
     if [ ! -d ".git" ]; then
-         echo -e "[\e[31mERROR\e[0m] Not a git repository."
+         echo -e "[\e[31mERROR\e[0m] Not a Git repo."
          exit 1
     fi
-    echo -e "[\e[34mINFO\e[0m] Pulling latest changes from remote...\n"
+    echo -e "[\e[34mINFO\e[0m] Pulling...\n"
     git pull --rebase -q
     if [ $? -eq 0 ]; then
-         echo -e "[\e[32mSUCCESS\e[0m] Repository is synced."
+         echo -e "[\e[32mSUCCESS\e[0m] Synced."
     else
-         echo -e "[\e[31mERROR\e[0m] Failed to sync repository. You may need to resolve conflicts."
+         echo -e "[\e[31mERROR\e[0m] Sync failed."
     fi
 }
 
 idal_undo() {
     show_banner
     if [ ! -d ".git" ]; then
-         echo -e "[\e[31mERROR\e[0m] Not a git repository."
+         echo -e "[\e[31mERROR\e[0m] Not a Git repo."
          exit 1
     fi
     
     # Check if there's a HEAD (at least 1 commit)
     if ! git rev-parse HEAD >/dev/null 2>&1; then
-         echo -e "[\e[31mERROR\e[0m] No commits to undo."
+         echo -e "[\e[31mERROR\e[0m] No commits."
          exit 1
     fi
 
-    echo -e "[\e[33mWARNING\e[0m] Are you sure you want to undo the last commit?"
-    echo -e "This will \e[1;31mKEEP\e[0m your file changes but \e[1;31mREMOVE\e[0m the commit log."
+    echo -e "[\e[33mWARNING\e[0m] Undo last commit?"
+    echo -e "Keeps files but removes log."
     read -p "Continue? (y/N): " confirm
     if [[ "$confirm" =~ ^[Yy]$ ]]; then
         git reset --soft HEAD~1
-        echo -e "\n[\e[32mSUCCESS\e[0m] Last commit undone. Your files are back in the staging area."
+        echo -e "[\e[32mSUCCESS\e[0m] Undone. Files staged."
     else
-        echo -e "\n[\e[34mINFO\e[0m] Undo cancelled."
+        echo -e "[\e[34mINFO\e[0m] Cancelled."
     fi
 }
 
@@ -175,13 +188,13 @@ idal_help() {
     show_banner
     echo -e "Usage: \e[1;36midal <command>\e[0m\n"
     echo -e "Commands:"
-    echo -e "  \e[1;32minit\e[0m    Initialize repo, add, commit, prompt URL, and push to main"
-    echo -e "  \e[1;32mgit\e[0m     Stage all changes, prompt for message, commit, and push"
-    echo -e "  \e[1;32mstatus\e[0m  Show colorful, concise working tree status"
-    echo -e "  \e[1;32mlog\e[0m     Show recent commits with a beautiful graph tree"
-    echo -e "  \e[1;32msync\e[0m    Pull latest changes from remote repository safely"
-    echo -e "  \e[1;32mundo\e[0m    Undo the last commit while saving your local file changes"
-    echo -e "  \e[1;32mhelp\e[0m    Show this help menu"
+    echo -e "  \e[1;32minit\e[0m    Init repo, commit, and push"
+    echo -e "  \e[1;32mgit\e[0m     Stage, commit, and push"
+    echo -e "  \e[1;32mstatus\e[0m  Show tree status"
+    echo -e "  \e[1;32mlog\e[0m     Show graph tree"
+    echo -e "  \e[1;32msync\e[0m    Pull latest safely"
+    echo -e "  \e[1;32mundo\e[0m    Undo last commit"
+    echo -e "  \e[1;32mhelp\e[0m    Show menu"
     echo ""
 }
 
@@ -208,7 +221,7 @@ case "$1" in
         idal_help
         ;;
     *)
-        echo -e "[\e[31mERROR\e[0m] Unknown command: $1\n"
+        echo -e "[\e[31mERROR\e[0m] Unknown: $1\n"
         idal_help
         exit 1
         ;;
